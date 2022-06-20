@@ -17,6 +17,7 @@
 #pragma once
 
 #include <android/hardware/biometrics/fingerprint/2.3/IBiometricsFingerprint.h>
+#include <android-base/unique_fd.h>
 #include <hidl/MQDescriptor.h>
 #include <hidl/Status.h>
 #include <vendor/xiaomi/hardware/displayfeature/1.0/IDisplayFeature.h>
@@ -62,6 +63,8 @@ struct BiometricsFingerprint : public IBiometricsFingerprint {
     Return<bool> isUdfps(uint32_t sensorId) override;
     Return<void> onFingerDown(uint32_t x, uint32_t y, float minor, float major) override;
     Return<void> onFingerUp() override;
+
+    android::base::unique_fd touch_fd_;
 
 private:
     sp<IBiometricsFingerprint_2_1> biometrics_2_1_service;

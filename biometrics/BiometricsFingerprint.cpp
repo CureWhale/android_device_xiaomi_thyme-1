@@ -18,13 +18,20 @@
 #include "BiometricsFingerprint.h"
 
 #include <android-base/logging.h>
+#include <android-base/file.h>
 #include <fstream>
 
 #define COMMAND_NIT 10
 #define PARAM_NIT_FOD 1
 #define PARAM_NIT_NONE 0
 
+#define FOD_STATUS_ON 1
+#define FOD_STATUS_OFF -1
+
+#define TOUCH_DEV_PATH "/dev/xiaomi-touch"
 #define TOUCH_FOD_ENABLE 10
+#define TOUCH_MAGIC 0x5400
+#define TOUCH_IOC_SETMODE TOUCH_MAGIC + 0
 
 namespace android {
 namespace hardware {
@@ -40,6 +47,7 @@ static void set(const std::string& path, const T& value) {
 }
 
 BiometricsFingerprint::BiometricsFingerprint() {
+    touch_fd_ = android::base::unique_fd(open(TOUCH_DEV_PATH, O_RDWR));
     biometrics_2_1_service = IBiometricsFingerprint_2_1::getService();
     displayFeatureService = IDisplayFeature::getService();
     touchFeatureService = ITouchFeature::getService();
@@ -91,12 +99,16 @@ Return<bool> BiometricsFingerprint::isUdfps(uint32_t) {
 }
 
 Return<void> BiometricsFingerprint::onFingerDown(uint32_t, uint32_t, float, float) {
+    int arg[2] = {TOUCH_FOD_ENABLE, FOD_STATUS_ON};
+    ioctl(touch_fd_.get(), TOUCH_IOC_SETMODE, &arg);
     touchFeatureService->setTouchMode(TOUCH_FOD_ENABLE, 1);
     xiaomiFingerprintService->extCmd(COMMAND_NIT, PARAM_NIT_FOD);
     return Void();
 }
 
 Return<void> BiometricsFingerprint::onFingerUp() {
+    int arg[2] = {TOUCH_FOD_ENABLE, FOD_STATUS_OFF};
+    ioctl(touch_fd_.get(), TOUCH_IOC_SETMODE, &arg);
     touchFeatureService->resetTouchMode(TOUCH_FOD_ENABLE);
     xiaomiFingerprintService->extCmd(COMMAND_NIT, PARAM_NIT_NONE);
     return Void();
