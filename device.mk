@@ -80,6 +80,7 @@ endif
 
 # Common init scripts
 PRODUCT_PACKAGES += \
+    init.qcom.post_boot.sh \
     init.recovery.qcom.rc \
     init.recovery.usb.rc \
     init.recovery.qcom.sh \
