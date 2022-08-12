@@ -20,5 +20,17 @@
   {
     "repository": "android_packages_apps_GCamGOPrebuilt",
     "target_path": "packages/apps/GCamGOPrebuilt"
+  },
+  { 
+    "repository"   : "LynnrinChan/android_vendor_xiaomi_thyme-firmware",
+    "target_path"  : "vendor/xiaomi/thyme-firmware",
+    "branch"       : "arrow-12.1",
+    "remote"       : "gitlab"
+  },
+  { 
+    "repository"   : "LynnrinChan/android_vendor_xiaomi_thyme-miuicamera",
+    "target_path"  : "vendor/xiaomi/thyme-miuicamera",
+    "branch"       : "arrow-12.1",
+    "remote"       : "gitlab"
   }
 ]
