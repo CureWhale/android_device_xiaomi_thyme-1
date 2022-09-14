@@ -5,7 +5,7 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/arrow_thyme.mk
+    $(LOCAL_DIR)/cherish_thyme.mk
 
 COMMON_LUNCH_CHOICES := \
     cherish_thyme-userdebug \
